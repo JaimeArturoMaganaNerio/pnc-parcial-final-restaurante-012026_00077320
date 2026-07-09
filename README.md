@@ -132,3 +132,35 @@ Quiero que me respondan con sus propias palabras:
 ## 6. Para Cerrar
 
 No quiero medir si son capaces de escribir JWT de memoria. Quiero ver si son capaces de usar IA de forma crítica y responsable en un contexto de seguridad, donde los errores tienen consecuencias reales. Usen la IA, pero verifiquen, cuestionen y entiendan todo lo que les entregue.
+
+---
+
+## Configuración local (Fase 0)
+
+Este repositorio usa perfiles Spring (`local`, `prod`). Los archivos de configuración por perfil se encuentran en `src/main/resources/`:
+
+- `application-local.yml` (placeholders para desarrollo local)
+- `application-prod.yml` (placeholders para despliegue)
+
+Variables de entorno recomendadas (exportar/definir antes de ejecutar o en Docker Compose):
+
+- `SPRING_DATASOURCE_URL` (ej: `jdbc:postgresql://localhost:5432/pnc_db`)
+- `SPRING_DATASOURCE_USERNAME`
+- `SPRING_DATASOURCE_PASSWORD`
+- `APP_JWT_SECRET` (clave base64 segura; 256-bit recomendado)
+
+Ejemplo para generar una clave base64 segura (Linux/macOS):
+
+```bash
+head -c 32 /dev/urandom | base64
+```
+
+Para Windows (PowerShell):
+
+```powershell
+[System.Convert]::ToBase64String((1..32 | ForEach-Object {Get-Random -Maximum 256}) -as [byte[]])
+```
+
+El proyecto fuerza `spring.jpa.hibernate.ddl-auto: none` y las migraciones se aplicarán mediante Flyway (scripts en `src/main/resources/db/migration`). Los scripts iniciales están como marcadores y se completarán en la Fase 1.
+
+

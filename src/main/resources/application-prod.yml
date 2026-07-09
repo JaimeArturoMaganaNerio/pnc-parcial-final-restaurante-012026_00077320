@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db:5432/pnc_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: none
+  flyway:
+    enabled: true
+  profiles:
+    active: prod
+
+app:
+  jwt-secret: ${APP_JWT_SECRET:REPLACE_ME_BASE64}
+  jwt-access-expiration-milliseconds: 900000   # 15 minutes
+  jwt-refresh-expiration-milliseconds: 604800000 # 7 days
+
+
