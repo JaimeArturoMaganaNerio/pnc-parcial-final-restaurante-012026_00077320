@@ -35,3 +35,11 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+POSTGRES_DB=pnc_db
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=tu_password_seguro
+DATABASE_URL=jdbc:postgresql://db:5432/pnc_db
+JWT_SECRET=PEGA_AQUÍ_EL_MISMO_BASE64
+SPRING_PROFILES_ACTIVE=prod
