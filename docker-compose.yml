@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: restaurante_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-pnc_db}
+      POSTGRES_USER: ${DATABASE_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME:-postgres} -d ${POSTGRES_DB:-pnc_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: restaurante_api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      SPRING_DATASOURCE_URL: ${DATABASE_URL:-jdbc:postgresql://db:5432/pnc_db}
+      SPRING_DATASOURCE_USERNAME: ${DATABASE_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
+      APP_JWT_SECRET: ${JWT_SECRET:-REPLACE_ME_BASE64}
+      APP_JWT_ACCESS_EXPIRATION_MILLISECONDS: ${JWT_ACCESS_EXPIRATION_MILLISECONDS:-900000}
+      APP_JWT_REFRESH_EXPIRATION_MILLISECONDS: ${JWT_REFRESH_EXPIRATION_MILLISECONDS:-604800000}
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+

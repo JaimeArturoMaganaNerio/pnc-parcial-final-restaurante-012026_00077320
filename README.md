@@ -163,4 +163,30 @@ Para Windows (PowerShell):
 
 El proyecto fuerza `spring.jpa.hibernate.ddl-auto: none` y las migraciones se aplicarán mediante Flyway (scripts en `src/main/resources/db/migration`). Los scripts iniciales están como marcadores y se completarán en la Fase 1.
 
+## Docker (Fase 5)
+
+Archivos agregados:
+
+- `Dockerfile`
+- `docker-compose.yml`
+
+### Variables de entorno recomendadas para Docker Compose
+
+- `SPRING_PROFILES_ACTIVE` (default: `prod`)
+- `DATABASE_URL` (default: `jdbc:postgresql://db:5432/pnc_db`)
+- `DATABASE_USERNAME` (default: `postgres`)
+- `DATABASE_PASSWORD` (default: `postgres`)
+- `POSTGRES_DB` (default: `pnc_db`)
+- `JWT_SECRET` (**obligatorio en entorno real**, base64 segura)
+- `JWT_ACCESS_EXPIRATION_MILLISECONDS` (default: `900000`)
+- `JWT_REFRESH_EXPIRATION_MILLISECONDS` (default: `604800000`)
+
+### Levantar con Docker
+
+```bash
+docker compose up --build
+```
+
+El servicio de base de datos expone `5433:5432` para evitar conflicto local y la API se expone en `8080:8080`.
+
 
